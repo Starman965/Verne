@@ -1,0 +1,185 @@
+body {
+    font-family: 'Orbitron', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #0a0f20;
+    color: #00ffff;
+}
+
+#game-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    border: 2px solid #00ffff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px #00ffff;
+}
+#location-name {
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: center;
+    margin: 10px 0;
+    color: #00ffff;
+    text-shadow: 0 0 5px #00ffff;
+}
+
+#scene-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid #00ffff;
+    padding: 10px;
+    border-radius: 10px;
+    grid-column: 1;
+}
+
+#scene-image {
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 20px;
+}
+
+#scene-image img {
+    width: 100%;
+    height: auto;
+    border: 2px solid #00ffff;
+    border-radius: 10px;
+}
+
+#narrative-box {
+    background-color: rgba(10, 15, 32, 0.8);
+    padding: 15px;
+    border: 2px solid #00ffff;
+    border-radius: 10px;
+    color: #00ffff;
+    width: calc(100% - 30px); /* Adjust width to account for padding */
+    height: 150px; /* Set a fixed height */
+    overflow-y: auto; /* Make it scrollable */
+}
+
+#right-panel {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #00ffff;
+    border-radius: 10px;
+    background-color: #0a0f20;
+    color: #00ffff;
+    overflow: hidden;
+}
+
+#tabs {
+    display: flex;
+    border-bottom: 2px solid #00ffff;
+}
+
+#tabs button {
+    flex: 1;
+    background-color: transparent;
+    border: none;
+    color: #00ffff;
+    padding: 10px;
+    cursor: pointer;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1em;
+}
+
+#tabs button:hover, #tabs button.active {
+    background-color: rgba(0, 255, 255, 0.2);
+}
+
+#content-area {
+    flex-grow: 1;
+    padding: 10px;
+    overflow-y: auto;
+    border-bottom: 2px solid #00ffff;
+}
+
+#player-info {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: rgba(10, 15, 32, 0.8);
+}
+
+#player-health, #player-weapon {
+    margin: 0;
+}
+
+#action-section {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    grid-column: 1 / -1;
+}
+
+#action-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+#action-buttons button {
+    background-color: #0a0f20;
+    border: 2px solid #00ffff;
+    color: #00ffff;
+    padding: 5px 10px; /* Reduced vertical padding to make buttons less tall */
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.9em; /* Slightly smaller font size */
+}
+
+#action-buttons button:hover {
+    background-color: #00ffff;
+    color: #0a0f20;
+}
+
+#navigation-controls {
+    display: grid;
+    grid-template-areas:
+        ". north ."
+        "west . east"
+        ". south .";
+    gap: 10px;
+}
+
+#navigation-controls button {
+    background-color: #0a0f20;
+    border: 2px solid #00ffff;
+    color: #00ffff;
+    padding: 5px 10px; /* Reduced vertical padding to make buttons less tall */
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.9em; /* Slightly smaller font size */
+}
+
+#move-north { grid-area: north; }
+#move-south { grid-area: south; }
+#move-east { grid-area: east; }
+#move-west { grid-area: west; }
+
+#navigation-controls button:hover {
+    background-color: #00ffff;
+    color: #0a0f20;
+}
+.inventory-item {
+    padding: 5px;
+    margin: 5px 0;
+    cursor: pointer;
+    border: 1px solid #00ffff;
+    border-radius: 5px;
+}
+
+.inventory-item:hover {
+    background-color: rgba(0, 255, 255, 0.1);
+}
+
+.inventory-item.selected {
+    background-color: rgba(0, 255, 255, 0.3);
+    border: 2px solid #00ffff;
+}

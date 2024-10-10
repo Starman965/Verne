@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planetside RPG</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="game-container">
+        <div id="left-panel">
+            <div id="scene-section">
+                <div id="scene-image">
+                    <img src="/images/homescreen.png" alt="Welcome to Planetside" id="current-scene">
+                </div>
+                <div id="location-name">Welcome to Planetside</div>
+                <div id="narrative-box">
+                    Welcome to Planetside. Click the screen to begin your journey...
+                </div>
+            </div>
+            <div id="action-section">
+                <div id="action-buttons">
+                    <button id="examine-btn">Examine</button>
+                    <button id="interact-btn">Interact</button>
+                    <button id="use-btn">Use</button>
+                    <button id="pickup-button">Pickup</button>
+                    <button id="drop-btn">Drop</button>
+                    <button id="attack-btn">Attack</button>
+                </div>
+                <div id="navigation-controls">
+                    <button id="move-north">▲ North</button>
+                    <button id="move-west">◄ West</button>
+                    <button id="move-east">► East</button>
+                    <button id="move-south">▼ South</button>
+                </div>
+            </div>
+        </div>
+        <div id="right-panel">
+            <div id="tabs">
+                <button id="inventory-tab" class="active">Inventory</button>
+                <button id="quests-tab">Quests</button>
+                <button id="about-tab">About</button>
+            </div>
+            <div id="content-area">
+                <!-- Content for inventory, quests, or about will be dynamically inserted here -->
+            </div>
+            <div id="player-info">
+                <span id="player-health">Health: 100</span>
+                <span id="player-weapon">Weapon: Pistol</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js" type="module"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js" type="module"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js" type="module"></script>
+
+    <!-- Your scripts -->
+    <script src="firebase-config.js" type="module"></script>
+    <script src="scripts.js" type="module"></script>
+</body>
+</html>

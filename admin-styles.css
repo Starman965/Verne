@@ -1,0 +1,125 @@
+/* admin-styles.css */
+
+body {
+    font-family: 'Orbitron', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background-color: #0a0f20;
+    color: #00ffff;
+}
+
+.section {
+    border: 2px solid #00ffff;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: rgba(10, 15, 32, 0.8);
+    box-shadow: 0 0 20px #00ffff;
+}
+
+h2 {
+    color: #00ffff;
+    text-shadow: 0 0 5px #00ffff;
+}
+
+form {
+    display: grid;
+    gap: 15px;
+}
+
+label {
+    font-weight: bold;
+    color: #00ffff;
+}
+
+input[type="text"],
+input[type="number"],
+textarea,
+select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #00ffff;
+    border-radius: 5px;
+    background-color: rgba(0, 255, 255, 0.1);
+    color: #00ffff;
+    font-family: 'Orbitron', sans-serif;
+}
+
+input[type="file"] {
+    border: 2px solid #00ffff;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: rgba(0, 255, 255, 0.1);
+    color: #00ffff;
+}
+
+button {
+    background-color: #00ffff;
+    color: #0a0f20;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #0a0f20;
+    color: #00ffff;
+    box-shadow: 0 0 10px #00ffff;
+}
+
+.location-item {
+    background-color: rgba(0, 255, 255, 0.1);
+    border: 2px solid #00ffff;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+.location-item h3 {
+    margin-top: 0;
+    color: #00ffff;
+    text-shadow: 0 0 5px #00ffff;
+}
+
+#image-preview img {
+    max-width: 200px;
+    margin-top: 10px;
+    border: 2px solid #00ffff;
+    border-radius: 5px;
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0a0f20;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #00ffff;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #00cccc;
+}
+
+/* Placeholder text color */
+::placeholder {
+    color: rgba(0, 255, 255, 0.5);
+}
+
+/* Focus styles */
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    box-shadow: 0 0 10px #00ffff;
+}

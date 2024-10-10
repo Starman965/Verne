@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planetside Admin Tools</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin-styles.css">
+</head>
+<body>
+    <div id="game-management" class="section">
+        <h2>Game Management</h2>
+        <button id="init-game">Initialize Game Data</button>
+    </div>
+
+    <div id="add-location" class="section">
+        <h2>Add/Edit Location</h2>
+        <form id="location-form">
+            <input type="hidden" id="location-key" name="location-key">
+            <label for="location-name">Location Name:</label>
+            <input type="text" id="location-name" name="location-name" required>
+            <label for="x-coordinate">X Coordinate:</label>
+            <input type="number" id="x-coordinate" name="x-coordinate" required>
+            <label for="y-coordinate">Y Coordinate:</label>
+            <input type="number" id="y-coordinate" name="y-coordinate" required>
+            <label for="location-description">Description:</label>
+            <textarea id="location-description" name="location-description" required></textarea>
+            <label for="location-item">Item (if any):</label>
+            <input type="text" id="location-item" name="location-item">
+            <label for="location-image">Image:</label>
+            <input type="file" id="location-image" name="location-image" accept="image/*">
+            <div id="image-preview"></div>
+            <label for="location-audio">Audio:</label>
+            <input type="file" id="location-audio" name="location-audio" accept="audio/*">
+            <div id="audio-preview"></div>
+            <label for="location-narration">Narration:</label>
+            <textarea id="location-narration" name="location-narration"></textarea>
+            
+            <div id="exits-section">
+                <h3>Exits</h3>
+                <div id="exits-list"></div>
+                <button type="button" id="add-exit">Add Exit</button>
+            </div>
+
+            <button type="submit">Save Location</button>
+        </form>
+    </div>
+
+    <div id="manage-locations" class="section">
+        <h2>Manage Locations</h2>
+        <div id="location-list"></div>
+    </div>
+
+    <script type="module" src="admin_script.js"></script>
+</body>
+</html>
