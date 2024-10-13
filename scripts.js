@@ -392,7 +392,7 @@ function pickupItem(itemName) {
                         const inventoryRef = ref(database, `player/inventory/${itemKey}`);
                         set(inventoryRef, item).then(() => {
                             updateGameLog(`You picked up the ${item.name}.`);
-                            playSound('/sounds/backpack.mp3');
+                            playSound('https://starman965.github.io/Verne/sounds/backpack.mp3');
                             // Remove item from location
                             const updatedItems = locationData.items.filter(i => i !== itemName);
                             set(ref(database, `locations/${locationKey}/items`), updatedItems).then(() => {
