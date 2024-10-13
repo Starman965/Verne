@@ -22,7 +22,7 @@ body {
     font-size: 1.2em;
     font-weight: bold;
     text-align: center;
-    margin: 10px 0;
+    margin: 5px 0;
     color: #00ffff;
     text-shadow: 0 0 5px #00ffff;
 }
@@ -44,10 +44,19 @@ body {
 }
 
 #scene-image img {
-    width: 100%;
+    width: 612px;
     height: auto;
     border: 2px solid #00ffff;
     border-radius: 10px;
+    transition: opacity 0.2s ease-in-out;
+}
+
+#scene-image img.fade-out {
+    opacity: 0;
+}
+
+#scene-image img.fade-in {
+    opacity: 1;
 }
 
 #narrative-box {
@@ -57,7 +66,7 @@ body {
     border-radius: 10px;
     color: #00ffff;
     width: calc(100% - 30px); /* Adjust width to account for padding */
-    height: 150px; /* Set a fixed height */
+    height: 200px; /* Set a fixed height */
     overflow-y: auto; /* Make it scrollable */
 }
 
@@ -182,4 +191,93 @@ body {
 .inventory-item.selected {
     background-color: rgba(0, 255, 255, 0.3);
     border: 2px solid #00ffff;
+}
+.clickable-item {
+    cursor: pointer;
+    text-decoration: underline;
+    color: #00ffff;
+}
+
+.clickable-item:hover {
+    color: #ff00ff;
+}
+.more-text {
+    color: #00ffff;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.more-text:hover {
+    color: #00cccc;
+}
+.inventory-item {
+    cursor: pointer;
+    /* other styles */
+}
+
+.inventory-item.selected {
+    background-color: rgba(0, 255, 255, 0.3);
+    border: 2px solid #00ffff;
+}
+button:disabled,
+button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.inventory-item.droppable {
+    cursor: pointer;
+    background-color: rgba(0, 255, 255, 0.2);
+    border: 2px solid #00ffff;
+}
+
+.inventory-item.droppable:hover {
+    background-color: rgba(0, 255, 255, 0.4);
+}
+/* Add these new styles */
+#game-container.home-screen {
+    grid-template-columns: 1fr;
+}
+
+#game-container.home-screen #right-panel,
+#game-container.home-screen #action-section {
+    display: none;
+}
+
+#game-container.game-started {
+    grid-template-columns: 2fr 1fr;
+}
+
+#game-container.game-started #right-panel,
+#game-container.game-started #action-section {
+    display: flex;
+}
+
+#scene-image img {
+    width: 100%;
+    max-width: 612px;
+    height: auto;
+    border: 2px solid #00ffff;
+    border-radius: 10px;
+    transition: opacity 0.3s ease-in-out;
+}
+
+#scene-image img.fade-out {
+    opacity: 0;
+}
+
+#scene-image img.fade-in {
+    opacity: 1;
+}
+
+/* Add a transition for the game container */
+#game-container {
+    transition: all 0.3s ease-in-out;
+}
+.inventory-item.lookable {
+    cursor: pointer;
+    border: 2px solid #00ffff;
+}
+
+.inventory-item.lookable:hover {
+    background-color: rgba(0, 255, 255, 0.2);
 }

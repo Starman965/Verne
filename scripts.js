@@ -28,8 +28,6 @@ let currentLocation = {
     items: []
 };
 
-let selectedItemId = null;
-
 // DOM elements
 const narrativeBox = document.getElementById('narrative-box');
 const playerHealthDisplay = document.getElementById('player-health');
@@ -38,13 +36,108 @@ const contentArea = document.getElementById('content-area');
 const currentSceneImage = document.getElementById('current-scene');
 
 // Function to update the game log
-function updateGameLog(message) {
-    const newEntry = document.createElement('p');
-    newEntry.textContent = message;
-    narrativeBox.appendChild(newEntry);
-    narrativeBox.scrollTop = narrativeBox.scrollHeight;
-}
+// Function to update the game log
+// Function to update the game log
+function updateGameLog(message, clearPrevious = false) {
+    if (clearPrevious) {
+        narrativeBox.innerHTML = '';
+    }
+    
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = message;
+    const maxChars = 500; // Adjust this number to change the length before [MORE] appears
+    
+    if (tempDiv.innerText.length > maxChars) {
+        let firstPartHTML = '';
+        let remainingHTML = '';
+        let charCount = 0;
+        let inFirstPart = true;
 
+        for (const node of tempDiv.childNodes) {
+            if (node.nodeType === Node.TEXT_NODE) {
+                if (inFirstPart) {
+                    const availableChars = maxChars - charCount;
+                    if (node.length <= availableChars) {
+                        firstPartHTML += node.textContent;
+                        charCount += node.length;
+                    } else {
+                        firstPartHTML += node.textContent.slice(0, availableChars);
+                        remainingHTML += node.textContent.slice(availableChars);
+                        inFirstPart = false;
+                    }
+                } else {
+                    remainingHTML += node.textContent;
+                }
+            } else {
+                if (inFirstPart) {
+                    firstPartHTML += node.outerHTML;
+                    charCount += node.innerText.length;
+                    if (charCount >= maxChars) {
+                        inFirstPart = false;
+                    }
+                } else {
+                    remainingHTML += node.outerHTML;
+                }
+            }
+        }
+        
+        const newEntry = document.createElement('p');
+        newEntry.innerHTML = `${firstPartHTML} <span class="more-text">[MORE]</span>`;
+        narrativeBox.appendChild(newEntry);
+        
+        const moreText = newEntry.querySelector('.more-text');
+        moreText.addEventListener('click', () => {
+            const moreSpan = moreText;
+            moreSpan.remove();
+            const remainingText = document.createElement('span');
+            remainingText.innerHTML = remainingHTML;
+            newEntry.appendChild(remainingText);
+            
+            // Check if there's still more text to show
+            if (remainingText.innerText.length > maxChars) {
+                updateGameLog(remainingText.innerHTML);
+            }
+            
+            smoothScroll(narrativeBox, narrativeBox.scrollHeight, scrollSpeed);
+        });
+    } else {
+        const newEntry = document.createElement('p');
+        newEntry.innerHTML = message;
+        narrativeBox.appendChild(newEntry);
+    }
+    
+    smoothScroll(narrativeBox, narrativeBox.scrollHeight, scrollSpeed);
+}
+// Function for smooth auto-scrolling
+function smoothScroll(element, target, duration) {
+    const start = element.scrollTop;
+    const change = target - start;
+    let currentTime = 0;
+    const increment = 20;
+
+    function animateScroll() {
+        currentTime += increment;
+        const val = Math.easeInOutQuad(currentTime, start, change, duration);
+        element.scrollTop = val;
+        if (currentTime < duration) {
+            setTimeout(animateScroll, increment);
+        }
+    }
+
+    Math.easeInOutQuad = function (t, b, c, d) {
+        t /= d / 2;
+        if (t < 1) return c / 2 * t * t + b;
+        t--;
+        return -c / 2 * (t * (t - 2) - 1) + b;
+    };
+
+    animateScroll();
+}
+function clearNarrativeBox() {
+    narrativeBox.innerHTML = '';
+}
+// Scroll speed in milliseconds (adjust as needed)
+const scrollSpeed = 500; // You can modify this value to change the scroll speed
 // Function to update player info display
 function updatePlayerInfo() {
     playerHealthDisplay.textContent = `Health: ${player.health}`;
@@ -69,8 +162,15 @@ function displayInventory() {
         } else {
             contentArea.innerHTML += '<p>Your inventory is empty.</p>';
         }
+        updateDropButtonState(); // Call the new helper function here
     });
 }
+
+function getSelectedItemId() {
+    return selectedItemId;
+}
+let selectedItemId = null;
+
 function selectItem(itemId) {
     selectedItemId = itemId;
     document.querySelectorAll('.inventory-item').forEach(item => {
@@ -80,12 +180,7 @@ function selectItem(itemId) {
     if (selectedItem) {
         selectedItem.classList.add('selected');
     }
-    updateGameLog(`Selected item: ${selectedItem.textContent}`);
 }
-function getSelectedItemId() {
-    return selectedItemId;
-}
-
 // Function to update location
 function updateLocation(newX, newY) {
     const locationKey = `${newX}_${newY}`;
@@ -102,9 +197,31 @@ function updateLocation(newX, newY) {
             player.location = { x: newX, y: newY };
             const locationData = snapshot.val();
             currentLocation = locationData;
-            updateGameLog(`-->\n${currentLocation.description}`);
+            clearNarrativeBox();
+            updateGameLog(`-->\n${currentLocation.description}`, true);
+            
             if (currentLocation.imageLink) {
-                currentSceneImage.src = currentLocation.imageLink;
+                const currentSceneImage = document.getElementById('current-scene');
+                if (currentSceneImage) {
+                    // Fade out
+                    currentSceneImage.classList.add('fade-out');
+                    
+                    // Wait for fade out to complete, then change image and fade in
+                    setTimeout(() => {
+                        currentSceneImage.src = currentLocation.imageLink;
+                        
+                        // Wait for the new image to load before fading in
+                        currentSceneImage.onload = () => {
+                            currentSceneImage.classList.remove('fade-out');
+                            currentSceneImage.classList.add('fade-in');
+                            
+                            // Remove the fade-in class after transition completes
+                            setTimeout(() => {
+                                currentSceneImage.classList.remove('fade-in');
+                            }, 300); // This should match the transition duration in CSS
+                        };
+                    }, 300); // This should match the transition duration in CSS
+                }
             }
             
             // Update location name
@@ -130,7 +247,7 @@ function updateLocation(newX, newY) {
         }
     }).catch((error) => {
         console.error("Error checking location:", error);
-        updateGameLog("Something went wrong. Please try again.");
+        updateGameLog("An error occurred while updating the location. Please try again.");
     });
 }
 
@@ -167,28 +284,106 @@ function updateAvailableExits(exits) {
     });
 }
 
-function checkForItems(locationData) {
-    const pickupButton = document.getElementById('pickup-button');
-    if (pickupButton) {
-        if (locationData.item) {
-            updateGameLog(`You see a ${locationData.item} here.`);
-            pickupButton.disabled = false;
-            pickupButton.style.opacity = 1;
-        } else {
-            pickupButton.disabled = true;
-            pickupButton.style.opacity = 0.5;
+function updateActionButtonsState(items) {
+    const buttons = {
+        'look-btn': document.getElementById('look-btn'),
+        'pickup-btn': document.getElementById('pickup-btn'),
+        'interact-btn': document.getElementById('interact-btn'),
+        'use-btn': document.getElementById('use-btn'),
+        'drop-btn': document.getElementById('drop-btn'),
+        'attack-btn': document.getElementById('attack-btn')
+    };
+
+    const hasItems = items && items.length > 0;
+
+    Object.keys(buttons).forEach(key => {
+        if (buttons[key]) {
+            buttons[key].disabled = !hasItems;
         }
+    });
+}
+
+function handleItemClick(itemName) {
+    const activeAction = document.querySelector('#action-buttons button.active');
+    if (activeAction) {
+        switch (activeAction.id) {
+            case 'look-button':
+                lookItem(itemName);
+                break;
+            case 'pickup-button':
+                pickupItem(itemName);
+                break;
+            case 'interact-button':
+                interactWithItem(itemName);
+                break;
+            case 'use-button':
+                useItem(itemName);
+                break;
+        }
+    } else {
+        updateGameLog("Please select an action first (Look, Pickup, or Use).");
+    }
+}
+function handleLook(itemName) {
+    const itemKey = itemName.replace(/\s+/g, '_').toLowerCase();
+    const itemRef = ref(database, `items/${itemKey}`);
+    get(itemRef).then((snapshot) => {
+        if (snapshot.exists()) {
+            const item = snapshot.val();
+            updateGameLog(item.description);
+            if (item.imageLink) {
+                displayItemImage(item.imageLink);
+            }
+        } else {
+            updateGameLog(`You look the ${itemName}, but find nothing special about it.`);
+        }
+    });
+}
+
+
+function displayItemImage(imageUrl) {
+    const sceneImage = document.getElementById('current-scene');
+    sceneImage.src = imageUrl;
+    sceneImage.onclick = () => {
+        updateLocation(player.location.x, player.location.y); // Reset to location image
+    };
+}
+//Latest Check for Items
+function checkForItems(locationData) {
+    const pickupButton = document.getElementById('pickup-btn');
+    
+    if (!pickupButton) {
+        console.error("Pickup button not found in the DOM");
+        return; // Exit the function if the button is not found
+    }
+
+    if (locationData.items && locationData.items.length > 0) {
+        const itemsList = locationData.items.map(item => `<span class="clickable-item" data-item="${item}">${item}</span>`).join(', ');
+        updateGameLog(`You see ${itemsList} here.`);
+        pickupButton.disabled = false;
+        pickupButton.classList.remove('disabled');
+        
+        // Add click event listeners to clickable items
+        setTimeout(() => {
+            document.querySelectorAll('.clickable-item').forEach(item => {
+                item.addEventListener('click', () => pickupItem(item.dataset.item));
+            });
+        }, 0);
+    } else {
+        pickupButton.disabled = true;
+        pickupButton.classList.add('disabled');
+        // We're not adding any message about no items here
     }
 }
 
-function pickupItem() {
+// Latest to pickup an item
+function pickupItem(itemName) {
     const locationKey = `${player.location.x}_${player.location.y}`;
     const locationRef = ref(database, `locations/${locationKey}`);
     get(locationRef).then((snapshot) => {
         if (snapshot.exists()) {
             const locationData = snapshot.val();
-            if (locationData.item) {
-                const itemName = locationData.item;
+            if (locationData.items && locationData.items.includes(itemName)) {
                 const itemKey = itemName.replace(/\s+/g, '_').toLowerCase();
                 const itemRef = ref(database, `items/${itemKey}`);
                 get(itemRef).then((itemSnapshot) => {
@@ -197,84 +392,161 @@ function pickupItem() {
                         const inventoryRef = ref(database, `player/inventory/${itemKey}`);
                         set(inventoryRef, item).then(() => {
                             updateGameLog(`You picked up the ${item.name}.`);
+                            playSound('/sounds/backpack.mp3');
                             // Remove item from location
-                            const updatedLocationData = { ...locationData };
-                            delete updatedLocationData.item;
-                            set(ref(database, `locations/${locationKey}`), updatedLocationData).then(() => {
+                            const updatedItems = locationData.items.filter(i => i !== itemName);
+                            set(ref(database, `locations/${locationKey}/items`), updatedItems).then(() => {
                                 displayInventory();
                                 checkQuestProgress();
-                                checkForItems({});
-                            });
-                        });
-                    } else {
-                        console.log("Item does not exist in items database");
-                        // If the item doesn't exist in the items database, we'll create a basic item
-                        const basicItem = {
-                            name: itemName,
-                            description: `A ${itemName}.`
-                        };
-                        const inventoryRef = ref(database, `player/inventory/${itemKey}`);
-                        set(inventoryRef, basicItem).then(() => {
-                            updateGameLog(`You picked up the ${itemName}.`);
-                            // Remove item from location
-                            const updatedLocationData = { ...locationData };
-                            delete updatedLocationData.item;
-                            set(ref(database, `locations/${locationKey}`), updatedLocationData).then(() => {
-                                displayInventory();
-                                checkQuestProgress();
-                                checkForItems({});
+                                checkForItems({ items: updatedItems });
+                                updateDropButtonState();
                             });
                         });
                     }
                 });
-            } else {
-                updateGameLog("There's nothing to pick up here.");
             }
         }
-    }).catch((error) => {
-        console.error("Error in pickupItem:", error);
     });
 }
-function dropItem(itemId) {
-    const inventoryRef = ref(database, `player/inventory/${itemId}`);
+
+function performDropItem(itemId) {
+    const inventoryRef = ref(database, 'player/inventory');
     const locationKey = `${player.location.x}_${player.location.y}`;
     const locationRef = ref(database, `locations/${locationKey}`);
 
-    get(locationRef).then((snapshot) => {
-        if (snapshot.exists()) {
-            const locationData = snapshot.val();
-            if (locationData.item) {
-                updateGameLog(`There is already a ${locationData.item} here. You'll need to drop it in another location.`);
-            } else {
-                get(inventoryRef).then((itemSnapshot) => {
-                    if (itemSnapshot.exists()) {
-                        const item = itemSnapshot.val();
-                        remove(inventoryRef).then(() => {
-                            set(ref(database, `locations/${locationKey}/item`), item.name).then(() => {
-                                updateGameLog(`You dropped the ${item.name}.`);
-                                displayInventory();
-                                checkForItems({ item: item.name });
+    get(inventoryRef).then((inventorySnapshot) => {
+        if (inventorySnapshot.exists()) {
+            const itemSnapshot = inventorySnapshot.child(itemId);
+            if (itemSnapshot.exists()) {
+                const item = itemSnapshot.val();
+                remove(ref(database, `player/inventory/${itemId}`)).then(() => {
+                    get(locationRef).then((locationSnapshot) => {
+                        let locationData = locationSnapshot.val() || {};
+                        let items = locationData.items || [];
+                        items.push(item.name);
+                        set(ref(database, `locations/${locationKey}/items`), items).then(() => {
+                            updateGameLog(`You dropped the ${item.name}.`);
+                            playSound('/sounds/backpack.mp3');
+                            displayInventory();
+                            checkForItems({ items: items });
+                            updateDropButtonState();
+                            
+                            // Clear the selected item
+                            selectedItemId = null;
+                            document.querySelectorAll('.inventory-item').forEach(item => {
+                                item.classList.remove('selected');
                             });
                         });
-                    }
+                    });
                 });
+            } else {
+                updateGameLog("Error: Item not found in inventory.");
             }
+        } else {
+            updateGameLog("Error: Inventory is empty.");
         }
+    }).catch((error) => {
+        console.error("Error in dropItem:", error);
+        updateGameLog("Something went wrong. Please try again.");
     });
 }
-function startGame() {
-    currentSceneImage.src = ''; // Clear the splash screen
-    updateLocation(0, 0); // This will set the first location image
-    
-    // Enable all game controls
-    document.querySelectorAll('#action-buttons button, #navigation-controls button').forEach(button => {
-        button.disabled = false;
+function dropItem() {
+    const inventoryRef = ref(database, 'player/inventory');
+    get(inventoryRef).then((snapshot) => {
+        if (snapshot.exists() && Object.keys(snapshot.val()).length > 0) {
+            updateGameLog("Pick an item to drop.");
+            enableInventoryItemsForDrop();
+        } else {
+            updateGameLog("There's nothing in your inventory to drop.");
+        }
+    }).catch((error) => {
+        console.error("Error checking inventory:", error);
+        updateGameLog("Something went wrong. Please try again.");
     });
-    
-    // Remove the click event listener from the scene image
-    currentSceneImage.removeEventListener('click', startGame);
+}
+function playSound(soundFile) {
+    const audio = new Audio(soundFile);
+    audio.play();
+}
+function interactWithItem(itemName) {
+    updateGameLog(`You interact with the ${itemName}, but nothing happens.`);
+    // Implement specific interactions for items here
 }
 
+function useItem(itemName) {
+    updateGameLog(`You try to use the ${itemName}, but you're not sure how.`);
+    // Implement specific use cases for items here
+}
+
+function startGame() {
+    const homeScreenImage = document.getElementById('current-scene');
+    
+    // Fade out the home screen image
+    homeScreenImage.classList.add('fade-out');
+    
+    // Wait for the fade-out transition to complete
+    setTimeout(() => {
+        // Update location (this will set the first location image)
+        updateLocation(0, 0);
+        
+        // Enable all game controls
+        document.querySelectorAll('#action-buttons button, #navigation-controls button').forEach(button => {
+            button.disabled = false;
+        });
+        
+        // Remove the click event listener from the scene image
+        homeScreenImage.removeEventListener('click', startGame);
+        
+        // Show the game UI
+        document.getElementById('game-container').classList.remove('home-screen');
+        document.getElementById('game-container').classList.add('game-started');
+
+        // Update drop button state
+        updateDropButtonState();
+    }, 300); // This duration should match the CSS transition time
+}
+function updateDropButtonState() {
+    const dropButton = document.getElementById('drop-btn');
+    const inventoryRef = ref(database, 'player/inventory');
+    
+    get(inventoryRef).then((snapshot) => {
+        if (snapshot.exists() && Object.keys(snapshot.val()).length > 0) {
+            dropButton.disabled = false;
+            dropButton.classList.remove('disabled');
+        } else {
+            dropButton.disabled = true;
+            dropButton.classList.add('disabled');
+        }
+        
+        // Remove any existing event listeners
+        dropButton.removeEventListener('click', dropItem);
+        
+        // Add the event listener
+        dropButton.addEventListener('click', dropItem);
+    }).catch((error) => {
+        console.error("Error checking inventory:", error);
+    });
+}
+function enableInventoryItemsForDrop() {
+    const inventoryItems = document.querySelectorAll('.inventory-item');
+    inventoryItems.forEach(item => {
+        item.classList.add('droppable');
+        item.addEventListener('click', dropItemHandler, { once: true });
+    });
+}
+
+function dropItemHandler(event) {
+    const itemId = event.target.dataset.id;
+    if (itemId) {
+        performDropItem(itemId);
+    }
+    // Remove the 'droppable' class and click event listeners from all items
+    const inventoryItems = document.querySelectorAll('.inventory-item');
+    inventoryItems.forEach(item => {
+        item.classList.remove('droppable');
+        item.removeEventListener('click', dropItemHandler);
+    });
+}
 function checkQuestProgress() {
     const questsRef = ref(database, 'quests');
     const inventoryRef = ref(database, 'player/inventory');
@@ -328,16 +600,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const dropButton = document.getElementById('drop-btn');
-if (dropButton) {
-    dropButton.addEventListener('click', () => {
-        const selectedItemId = getSelectedItemId();
-        if (selectedItemId) {
-            dropItem(selectedItemId);
-        } else {
-            updateGameLog("Please select an item to drop from your inventory.");
-        }
-    });
-}
+    if (dropButton) {
+        dropButton.addEventListener('click', dropItem);
+    }
 
     // Add click event to the scene image to start the game
     currentSceneImage.addEventListener('click', startGame);
@@ -377,7 +642,7 @@ if (dropButton) {
                     displayQuests();
                     break;
                 case 'about-tab':
-                    contentArea.innerHTML = '<h3>About</h3><p>Planetside RPG - A text-based adventure game.</p>';
+                    contentArea.innerHTML = '<h3>About</h3><p>Planetside RPG - An interactive fiction adventure game created using the Verne Stories Engine, written by David Lewis.</p><p>All images created by Generative AI. Audio created by AI and licensed by Epidemic Sound.</p>';
                     break;
             }
         });
@@ -386,6 +651,13 @@ if (dropButton) {
     // Initialize the game
     updatePlayerInfo();
     displayInventory();
+});
+
+document.querySelectorAll('#action-buttons button').forEach(button => {
+    button.addEventListener('click', () => {
+        document.querySelectorAll('#action-buttons button').forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+    });
 });
 
 // Make functions available globally for onclick events

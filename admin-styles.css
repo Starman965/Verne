@@ -72,7 +72,7 @@ button:hover {
     box-shadow: 0 0 10px #00ffff;
 }
 
-.location-item {
+.location-item, .item-entry {
     background-color: rgba(0, 255, 255, 0.1);
     border: 2px solid #00ffff;
     padding: 15px;
@@ -80,13 +80,13 @@ button:hover {
     border-radius: 5px;
 }
 
-.location-item h3 {
+.location-item h3, .item-entry h3 {
     margin-top: 0;
     color: #00ffff;
     text-shadow: 0 0 5px #00ffff;
 }
 
-#image-preview img {
+#image-preview img, #item-image-preview img {
     max-width: 200px;
     margin-top: 10px;
     border: 2px solid #00ffff;
@@ -122,4 +122,50 @@ textarea:focus,
 select:focus {
     outline: none;
     box-shadow: 0 0 10px #00ffff;
+}
+
+/* Styles for multiple select */
+select[multiple] {
+    height: auto;
+    min-height: 100px;
+}
+
+/* Checkbox styles */
+input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #00ffff;
+    border-radius: 3px;
+    background-color: rgba(0, 255, 255, 0.1);
+    display: inline-block;
+    position: relative;
+    margin-right: 5px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+input[type="checkbox"]:checked::before {
+    content: '\2713';
+    display: block;
+    color: #00ffff;
+    text-align: center;
+    font-size: 16px;
+    line-height: 20px;
+}
+
+/* Styles for exit fields */
+#exits-list > div {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+#exits-list select, #exits-list input {
+    flex: 1;
+}
+
+#exits-list button {
+    flex: 0 0 auto;
 }
