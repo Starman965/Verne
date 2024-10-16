@@ -426,7 +426,7 @@ function performDropItem(itemId) {
                         items.push(item.name);
                         set(ref(database, `locations/${locationKey}/items`), items).then(() => {
                             updateGameLog(`You dropped the ${item.name}.`);
-                            playSound('/sounds/backpack.mp3');
+                            playSound('https://starman965.github.io/Verne/sounds/backpack.mp3');
                             displayInventory();
                             checkForItems({ items: items });
                             updateDropButtonState();
