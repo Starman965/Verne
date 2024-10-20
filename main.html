@@ -49,6 +49,10 @@
             padding: 0.5rem;
             text-align: center;
         }
+        .story-link {
+            text-decoration: none;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -57,10 +61,12 @@
     </header>
     <main class="main-content">
         <div class="story-grid">
-            <div class="story-item">
-                <img src="https://via.placeholder.com/300x450?text=Planetside" alt="Planetside">
-                <div class="story-title">Planetside</div>
-            </div>
+            <a href="https://starman965.github.io/Verne/" class="story-link">
+                <div class="story-item">
+                    <img src="https://via.placeholder.com/300x450?text=Planetside" alt="Planetside">
+                    <div class="story-title">Planetside</div>
+                </div>
+            </a>
             <div class="story-item">
                 <img src="https://via.placeholder.com/300x450?text=Story+2" alt="Story 2">
                 <div class="story-title">Story 2</div>
@@ -93,10 +99,12 @@
     </main>
     <script>
         document.querySelectorAll('.story-item').forEach(item => {
-            item.addEventListener('click', () => {
-                alert('Opening story: ' + item.querySelector('.story-title').textContent);
-                // Here you would typically navigate to the story page
-            });
+            if (!item.closest('a')) {  // Only add click event to items without links
+                item.addEventListener('click', () => {
+                    alert('Opening story: ' + item.querySelector('.story-title').textContent);
+                    // Here you would typically navigate to the story page
+                });
+            }
         });
     </script>
 </body>
