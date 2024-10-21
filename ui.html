@@ -110,10 +110,24 @@
             overflow-y: auto;
             font-size: 0.9em;
         }
+        #bottom-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
         #action-buttons {
             display: flex;
             gap: 10px;
-            padding-bottom: 10px;
+        }
+        #navigation-controls {
+            display: grid;
+            grid-template-areas:
+                ". north ."
+                "west . east"
+                ". south .";
+            gap: 5px;
+            width: 120px;
+            margin-left: 20px;
         }
         button {
             background-color: rgba(0, 0, 0, 0.7);
@@ -133,6 +147,10 @@
         button:hover {
             background-color: rgba(0, 255, 255, 0.3);
         }
+        #move-north { grid-area: north; }
+        #move-south { grid-area: south; }
+        #move-east { grid-area: east; }
+        #move-west { grid-area: west; }
         
         @media (max-width: 768px) {
             #right-panel {
@@ -178,13 +196,21 @@
                 <div id="narrative-box">
                     You are standing in front of a massive Stargate. The gate's ring is filled with a shimmering blue event horizon. To the west, you see the entrance to the control room. The path to the east is blocked by walls of controls and displays.
                 </div>
-                <div id="action-buttons">
-                    <button>Examine</button>
-                    <button>Interact</button>
-                    <button>Use</button>
-                    <button>Pickup</button>
-                    <button>Drop</button>
-                    <button>Attack</button>
+                <div id="bottom-controls">
+                    <div id="action-buttons">
+                        <button>Examine</button>
+                        <button>Interact</button>
+                        <button>Use</button>
+                        <button>Pickup</button>
+                        <button>Drop</button>
+                        <button>Attack</button>
+                    </div>
+                    <div id="navigation-controls">
+                        <button id="move-north">▲</button>
+                        <button id="move-west">◄</button>
+                        <button id="move-east">►</button>
+                        <button id="move-south">▼</button>
+                    </div>
                 </div>
             </div>
         </div>
