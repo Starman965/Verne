@@ -64,16 +64,16 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: flex-end;
+            justify-content: space-between;
             padding: 10px;
             position: relative;
         }
         #right-panel {
             position: absolute;
-            top: 50px;
+            top: 10px;
             right: 10px;
             width: 250px;
-            height: 300px;
+            height: 200px;
             background-color: rgba(0, 0, 0, 0.7);
             border: 1px solid #00ffff;
             border-radius: 5px;
@@ -100,24 +100,22 @@
             overflow-y: auto;
             font-size: 0.9em;
         }
+        #bottom-ui {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 10px;
+        }
         #narrative-box {
+            flex-grow: 1;
             background-color: rgba(0, 0, 0, 0.7);
             padding: 10px;
             border: 1px solid #00ffff;
             border-radius: 5px;
-            margin-bottom: 10px;
-            max-height: 100px;
+            margin-right: 20px;
+            height: 80px;
             overflow-y: auto;
             font-size: 0.9em;
-        }
-        #controls-area {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-        }
-        #action-buttons {
-            display: flex;
-            gap: 5px;
         }
         #navigation-controls {
             display: grid;
@@ -127,6 +125,15 @@
                 ". south .";
             gap: 5px;
             width: 120px;
+        }
+        #action-buttons {
+            display: flex;
+            gap: 5px;
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            right: 140px;
+            justify-content: space-between;
         }
         button {
             background-color: rgba(0, 0, 0, 0.7);
@@ -150,6 +157,21 @@
         #move-south { grid-area: south; }
         #move-east { grid-area: east; }
         #move-west { grid-area: west; }
+        
+        @media (max-width: 768px) {
+            #right-panel {
+                width: 200px;
+                height: 150px;
+            }
+            #narrative-box {
+                height: 60px;
+            }
+            button {
+                font-size: 0.7em;
+                min-width: 50px;
+                height: 25px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -177,17 +199,9 @@
                         <p>Your inventory is empty.</p>
                     </div>
                 </div>
-                <div id="narrative-box">
-                    You are standing in front of a massive Stargate. The gate's ring is filled with a shimmering blue event horizon. To the west, you see the entrance to the control room. The path to the east is blocked by walls of controls and displays.
-                </div>
-                <div id="controls-area">
-                    <div id="action-buttons">
-                        <button>Examine</button>
-                        <button>Interact</button>
-                        <button>Use</button>
-                        <button>Pickup</button>
-                        <button>Drop</button>
-                        <button>Attack</button>
+                <div id="bottom-ui">
+                    <div id="narrative-box">
+                        You are standing in front of a massive Stargate. The gate's ring is filled with a shimmering blue event horizon. To the west, you see the entrance to the control room. The path to the east is blocked by walls of controls and displays.
                     </div>
                     <div id="navigation-controls">
                         <button id="move-north">▲</button>
@@ -196,6 +210,14 @@
                         <button id="move-south">▼</button>
                     </div>
                 </div>
+            </div>
+            <div id="action-buttons">
+                <button>Examine</button>
+                <button>Interact</button>
+                <button>Use</button>
+                <button>Pickup</button>
+                <button>Drop</button>
+                <button>Attack</button>
             </div>
         </div>
     </div>
