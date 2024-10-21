@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planetside RPG UI Demo</title>
+    <title>Updated Planetside RPG UI Demo</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body, html {
@@ -46,51 +46,61 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px;
-            background-color: rgba(10, 15, 32, 0.7);
+            padding: 5px 10px;
+            background-color: rgba(10, 15, 32, 0.5);
+            height: 30px;
         }
         #location-name {
-            font-size: 1.2em;
+            font-size: 1em;
             font-weight: bold;
             text-shadow: 0 0 5px #00ffff;
         }
         #player-info {
             display: flex;
             gap: 20px;
+            font-size: 0.9em;
         }
         #game-content {
             display: flex;
             flex: 1;
             padding: 20px;
+            align-items: flex-end;
         }
         #left-panel {
-            flex: 2;
+            flex: 3;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 10px;
         }
         #narrative-box {
             background-color: rgba(10, 15, 32, 0.7);
             padding: 15px;
             border: 2px solid #00ffff;
-            border-radius: 10px;
-            height: 150px;
+            border-radius: 10px 10px 0 0;
+            height: 100px;
             overflow-y: auto;
+            font-size: 0.9em;
         }
         #action-section {
             display: flex;
             justify-content: space-between;
+            background-color: rgba(10, 15, 32, 0.7);
+            padding: 10px;
+            border: 2px solid #00ffff;
+            border-radius: 0 0 10px 10px;
         }
-        #action-buttons, #navigation-controls {
+        #action-buttons {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 5px;
         }
         #navigation-controls {
+            display: grid;
             grid-template-areas:
                 ". north ."
                 "west . east"
                 ". south .";
+            gap: 5px;
         }
         #move-north { grid-area: north; }
         #move-south { grid-area: south; }
@@ -98,13 +108,13 @@
         #move-west { grid-area: west; }
         button {
             background-color: rgba(10, 15, 32, 0.7);
-            border: 2px solid #00ffff;
+            border: 1px solid #00ffff;
             color: #00ffff;
-            padding: 10px;
+            padding: 5px;
             border-radius: 5px;
             cursor: pointer;
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.9em;
+            font-size: 0.8em;
         }
         #right-panel {
             flex: 1;
@@ -115,6 +125,7 @@
             border-radius: 10px;
             overflow: hidden;
             margin-left: 20px;
+            max-height: 300px;
         }
         #tabs {
             display: flex;
@@ -125,11 +136,22 @@
             background-color: transparent;
             border: none;
             border-radius: 0;
+            padding: 5px;
         }
         #content-area {
             flex-grow: 1;
             padding: 10px;
             overflow-y: auto;
+            font-size: 0.8em;
+        }
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 255, 255, 0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 255, 0.5);
         }
     </style>
 </head>
