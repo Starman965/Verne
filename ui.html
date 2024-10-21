@@ -64,7 +64,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: flex-end;
             padding: 10px;
             position: relative;
         }
@@ -100,40 +100,20 @@
             overflow-y: auto;
             font-size: 0.9em;
         }
-        #bottom-ui {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-top: 10px;
-        }
         #narrative-box {
-            flex-grow: 1;
             background-color: rgba(0, 0, 0, 0.7);
             padding: 10px;
             border: 1px solid #00ffff;
             border-radius: 5px;
-            margin-right: 20px;
+            margin-bottom: 10px;
             height: 80px;
             overflow-y: auto;
             font-size: 0.9em;
         }
-        #navigation-controls {
-            display: grid;
-            grid-template-areas:
-                ". north ."
-                "west . east"
-                ". south .";
-            gap: 5px;
-            width: 120px;
-        }
         #action-buttons {
             display: flex;
-            gap: 5px;
-            position: fixed;
-            bottom: 10px;
-            left: 10px;
-            right: 140px;
-            justify-content: space-between;
+            gap: 10px;
+            padding-bottom: 10px;
         }
         button {
             background-color: rgba(0, 0, 0, 0.7);
@@ -153,10 +133,6 @@
         button:hover {
             background-color: rgba(0, 255, 255, 0.3);
         }
-        #move-north { grid-area: north; }
-        #move-south { grid-area: south; }
-        #move-east { grid-area: east; }
-        #move-west { grid-area: west; }
         
         @media (max-width: 768px) {
             #right-panel {
@@ -199,25 +175,17 @@
                         <p>Your inventory is empty.</p>
                     </div>
                 </div>
-                <div id="bottom-ui">
-                    <div id="narrative-box">
-                        You are standing in front of a massive Stargate. The gate's ring is filled with a shimmering blue event horizon. To the west, you see the entrance to the control room. The path to the east is blocked by walls of controls and displays.
-                    </div>
-                    <div id="navigation-controls">
-                        <button id="move-north">▲</button>
-                        <button id="move-west">◄</button>
-                        <button id="move-east">►</button>
-                        <button id="move-south">▼</button>
-                    </div>
+                <div id="narrative-box">
+                    You are standing in front of a massive Stargate. The gate's ring is filled with a shimmering blue event horizon. To the west, you see the entrance to the control room. The path to the east is blocked by walls of controls and displays.
                 </div>
-            </div>
-            <div id="action-buttons">
-                <button>Examine</button>
-                <button>Interact</button>
-                <button>Use</button>
-                <button>Pickup</button>
-                <button>Drop</button>
-                <button>Attack</button>
+                <div id="action-buttons">
+                    <button>Examine</button>
+                    <button>Interact</button>
+                    <button>Use</button>
+                    <button>Pickup</button>
+                    <button>Drop</button>
+                    <button>Attack</button>
+                </div>
             </div>
         </div>
     </div>
