@@ -136,16 +136,16 @@ body {
 
 .nav-button:hover:not(:disabled) {
     color: rgba(255, 255, 255, 1);
-    transform: scale(1.2);
+    transform: scale(1.4);
 }
 
 .nav-button:disabled {
-    opacity: 0.3;
+    opacity: 0.8;
     cursor: not-allowed;
 }
 
 /* Caption Area */
-/* Caption Area */
+
 #narrative-box {
     position: fixed;
     bottom: 10%;
