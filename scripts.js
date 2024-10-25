@@ -11,7 +11,7 @@ import {
     update
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
 
-import { audioManager } from '/audio-manager.js';
+import { audioManager } from 'https://starman965.github.io/Verne/audio-manager.js';
 
 // Initialize Firebase
 console.log('Initializing Firebase...');
