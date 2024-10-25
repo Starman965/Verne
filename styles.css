@@ -1,233 +1,378 @@
-body, html {
+/* styles.css */
+:root {
+    /* Easily adjustable UI settings */
+    --ui-opacity: 1.0;
+    --ui-background: rgba(0, 0, 0, 0.6);
+    --text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    --caption-gradient: linear-gradient(transparent, rgba(0, 0, 0, 0.7) 40%, rgba(0, 0, 0, 0.7));
+    --panel-slide-time: 300ms;
+    --scene-fade-time: 300ms;
+    --button-transition: 200ms;
+    --caption-fade-time: 500ms;
+}
+
+* {
     margin: 0;
     padding: 0;
-    height: 100%;
-    font-family: 'Orbitron', sans-serif;
-    line-height: 1.6;
-    background-color: #0a0f20;
-    color: #00ffff;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     overflow: hidden;
+    height: 100vh;
+    background: #000;
 }
 
 #game-container {
     position: relative;
     width: 100vw;
     height: 100vh;
+    background: #000;
 }
 
-#scene-background {
+/* Scene Management */
+#scene-container {
     position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
     z-index: 1;
 }
 
-#current-scene {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: opacity 0.3s ease-in-out;
-}
-
-#ui-overlay {
+#scene-image {
     position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
+    background-size: cover;
+    background-position: center;
+    transition: opacity var(--scene-fade-time) ease-in-out;
 }
 
-#top-bar {
+#scene-image.fade-out {
+    opacity: 0;
+}
+
+#scene-image.fade-in {
+    opacity: 1;
+}
+
+/* Action Buttons Panel */
+#action-buttons {
+    position: fixed;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 10;
+}
+
+.action-button {
+    background: var(--ui-background);
+    border: none;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
     align-items: center;
-    padding: 10px;
-    background-color: rgba(10, 15, 32, 0.7);
-}
-
-#location-name {
-    font-size: 1.2em;
-    font-weight: bold;
-    color: #00ffff;
-    text-shadow: 0 0 5px #00ffff;
-}
-
-#player-info {
-    display: flex;
-    gap: 20px;
-}
-
-#game-content {
-    display: flex;
-    flex: 1;
-    padding: 20px;
-}
-
-#left-panel {
-    flex: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-#narrative-box {
-    background-color: rgba(10, 15, 32, 0.7);
-    padding: 15px;
-    border: 2px solid #00ffff;
-    border-radius: 10px;
-    color: #00ffff;
-    height: 200px;
-    overflow-y: auto;
-}
-
-#action-section {
-    display: flex;
-    justify-content: space-between;
-}
-
-#action-buttons, #navigation-controls {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
     gap: 10px;
-}
-
-#navigation-controls {
-    grid-template-areas:
-        ". north ."
-        "west . east"
-        ". south .";
-}
-
-#move-north { grid-area: north; }
-#move-south { grid-area: south; }
-#move-east { grid-area: east; }
-#move-west { grid-area: west; }
-
-button {
-    background-color: rgba(10, 15, 32, 0.7);
-    border: 2px solid #00ffff;
-    color: #00ffff;
-    padding: 10px;
-    border-radius: 5px;
     cursor: pointer;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.9em;
-    transition: background-color 0.3s, color 0.3s;
+    opacity: var(--ui-opacity);
+    transition: all var(--button-transition);
+    backdrop-filter: blur(4px);
 }
 
-button:hover:not(:disabled) {
-    background-color: rgba(0, 255, 255, 0.3);
-    color: #ffffff;
+.action-button:hover:not(:disabled) {
+    opacity: 1;
+    transform: scale(1.05);
 }
 
-button:disabled {
-    opacity: 0.5;
+.action-button.active {
+    background: rgba(255, 255, 255, 0.2);
+    opacity: 1;
+}
+
+.action-button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Navigation Controls */
+#navigation-controls {
+    position: fixed;
+    right: 75px;
+    bottom: 75px;
+    display: grid;
+    grid-template: 
+        ".... up ...."
+        "left .. right"
+        ".... down ....";
+    gap: 8px;
+    z-index: 10;
+    padding: 6px;
+  
+}
+
+.nav-button {
+    width: 50px;
+    height: 50px;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, .8);
+    font-size: 32px;
+    cursor: pointer;
+    transition: all var(--button-transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#move-north { grid-area: up; }
+#move-south { grid-area: down; }
+#move-east { grid-area: right; }
+#move-west { grid-area: left; }
+
+.nav-button:hover:not(:disabled) {
+    color: rgba(255, 255, 255, 1);
+    transform: scale(1.2);
+}
+
+.nav-button:disabled {
+    opacity: 0.3;
     cursor: not-allowed;
 }
 
-#right-panel {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    background-color: rgba(10, 15, 32, 0.7);
-    border: 2px solid #00ffff;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-left: 20px;
+/* Caption Area */
+/* Caption Area */
+#narrative-box {
+    position: fixed;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    padding: 20px;
+    text-align: center;
+    color: white;
+    z-index: 20;
+    opacity: 0;
+    transition: opacity var(--caption-fade-time);
 }
 
-#tabs {
-    display: flex;
-    border-bottom: 2px solid #00ffff;
+#narrative-box.visible {
+    opacity: 1;
 }
 
-#tabs button {
-    flex: 1;
-    background-color: transparent;
-    border: none;
-    border-radius: 0;
-    color: #00ffff;
-    padding: 10px;
+#narrative-box::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    background: var(--caption-gradient);
+    z-index: -1;
+    border-radius: 8px;
 }
-
-#tabs button:hover, #tabs button.active {
-    background-color: rgba(0, 255, 255, 0.2);
-}
-
-#content-area {
-    flex-grow: 1;
-    padding: 10px;
-    overflow-y: auto;
-}
-
-.inventory-item, .quest-item {
-    padding: 5px;
-    margin: 5px 0;
-    cursor: pointer;
-    border: 1px solid #00ffff;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-
-.inventory-item:hover, .quest-item:hover {
-    background-color: rgba(0, 255, 255, 0.1);
-}
-
-.inventory-item.selected {
-    background-color: rgba(0, 255, 255, 0.3);
-    border: 2px solid #00ffff;
-}
-
 .clickable-item {
     cursor: pointer;
+    color: #fff;
     text-decoration: underline;
-    color: #00ffff;
+    transition: color 0.2s;
 }
 
 .clickable-item:hover {
-    color: #ff00ff;
+    color: #ffff00; /* or any highlight color you prefer */
 }
 
-.more-text {
-    color: #00ffff;
+/* Menu Panel */
+#menu-panel {
+    position: fixed;
+    left: -300px;
+    top: 0;
+    width: 300px;
+    height: 100vh;
+    background: var(--ui-background);
+    transition: left var(--panel-slide-time);
+    z-index: 30;
+    backdrop-filter: blur(8px);
+}
+
+#menu-panel.open {
+    left: 0;
+}
+
+/* Top Bar Icons */
+#top-icons {
+    position: fixed;
+    top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    z-index: 20;
+}
+
+.menu-toggle {
+    background: var(--ui-background);
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    opacity: var(--ui-opacity);
+    transition: opacity var(--button-transition);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-toggle:hover {
+    opacity: 1;
+}
+
+#right-icons {
+    display: flex;
+    gap: 15px;
+}
+
+/* Side Panels */
+.side-panel {
+    position: fixed;
+    right: -300px;
+    top: 0;
+    width: 300px;
+    height: 100vh;
+    background: var(--ui-background);
+    transition: right var(--panel-slide-time);
+    z-index: 30;
+    backdrop-filter: blur(8px);
+}
+
+.side-panel.open {
+    right: 0;
+}
+
+/* Menu Content */
+.menu-content {
+    padding: 20px;
+    color: white;
+}
+
+.menu-item {
+    padding: 15px;
+    cursor: pointer;
+    opacity: var(--ui-opacity);
+    transition: opacity var(--button-transition);
+    border-radius: 8px;
+}
+
+.menu-item:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Inventory and Quest Items */
+.inventory-item, .quest-item {
+    padding: 10px;
+    margin: 5px 0;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    transition: all var(--button-transition);
+}
+
+.inventory-item:hover, .quest-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.inventory-item.selected {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.8);
+}
+
+.quest-item.completed {
+    opacity: 0.7;
+    text-decoration: line-through;
+}
+
+.inventory-item {
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    transition: all 0.2s;
+    opacity: 0.7;
+}
+
+.inventory-item.droppable {
+    cursor: pointer;
+    opacity: 1;
+    border-color: rgba(255, 255, 255, 0.8);
+}
+
+.inventory-item.droppable:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.02);
+}
+
+/* Clickable Items in Scene */
+.clickable-item {
     cursor: pointer;
     text-decoration: underline;
+    color: #fff;
+    transition: color var(--button-transition);
 }
 
-.more-text:hover {
-    color: #00cccc;
+.clickable-item:hover {
+    color: rgba(255, 255, 255, 0.8);
+}
+/* Settings Sytles */
+.settings-section {
+    padding: 20px;
+    color: white;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 8px;
 }
 
-/* Transitions for game start */
-#game-container.home-screen #right-panel,
-#game-container.home-screen #action-section {
-    display: none;
+.setting-group {
+    margin-bottom: 20px;
 }
 
-#game-container.game-started #right-panel,
-#game-container.game-started #action-section {
+.setting-group label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.volume-control {
     display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 20px;
 }
 
-/* Scrollbar Styles */
-::-webkit-scrollbar {
-    width: 8px;
+input[type="range"] {
+    flex-grow: 1;
+    height: 5px;
+    border-radius: 5px;
+    background: #666;
+    outline: none;
+    -webkit-appearance: none;
 }
 
-::-webkit-scrollbar-track {
-    background: rgba(10, 15, 32, 0.5);
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #00ffff;
+    cursor: pointer;
 }
 
-::-webkit-scrollbar-thumb {
-    background: rgba(0, 255, 255, 0.5);
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 255, 255, 0.7);
+.volume-value {
+    min-width: 20px;
+    text-align: right;
 }
