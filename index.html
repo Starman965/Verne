@@ -5,11 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Story Game</title>
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Full-Screen Button -->
+<button id="fullscreen-button" class="menu-toggle">Enter Fullscreen</button>
+
     <div id="game-container">
         <div id="scene-container">
             <!-- Scene image will be set as background -->
@@ -99,9 +101,6 @@
         <!-- Menu Panel -->
         <div id="menu-panel">
             <div class="menu-content">
-                <div class="menu-item">New Game</div>
-                <div class="menu-item">Save Game</div>
-                <div class="menu-item">Load Game</div>
                 <div class="menu-item">Settings</div>
                 <div class="menu-item">
                     <label for="volume-slider">Volume: <span id="volume-value">5</span></label>

@@ -3,106 +3,305 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planetside RPG Admin Panel</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>Story Game Admin Panel</title>
     <link rel="stylesheet" href="admin-styles.css">
 </head>
 <body>
     <div id="admin-container">
-        <h1>Planetside RPG Admin Panel</h1>
+        <header>
+            <h1>Story Game Admin Panel</h1>
+        </header>
 
-        <section id="game-management">
-            <h2>Game Management</h2>
-            <button id="init-game">Initialize Game Data</button>
-        </section>
+        <!-- Tab Navigation -->
+        <nav class="tab-navigation">
+            <button class="tab-button" data-tab="splash">Splash Screens</button>
+            <button class="tab-button" data-tab="locations">Locations</button>
+            <button class="tab-button" data-tab="items">Items</button>
+            <button class="tab-button" data-tab="quests">Quests</button>
+            <button class="tab-button" data-tab="cutscenes">Cut Scenes</button>
+            <button class="tab-button" data-tab="settings">Settings</button>
+        </nav>
 
-        <section id="location-management">
-            <h2>Location Management</h2>
-            <form id="location-form">
-                <input type="hidden" id="location-key">
-                
-                <label for="location-name">Location Name:</label>
-                <input type="text" id="location-name" required>
-                
-                <label for="x-coordinate">X Coordinate:</label>
-                <input type="number" id="x-coordinate" required>
-                
-                <label for="y-coordinate">Y Coordinate:</label>
-                <input type="number" id="y-coordinate" required>
-                
-                <label for="location-description">Description:</label>
-                <textarea id="location-description" required></textarea>
-                
-                <div id="items-management">
-                    <div>
-                        <label for="location-items">Items in Location:</label>
-                        <select id="location-items" multiple size="5"></select>
+        <!-- Splash Screen Panels -->
+        <div id="splash-screen-panels" class="panels-container">
+            <!-- List Panel -->
+            <div class="list-panel">
+                <div class="panel-header">
+                    <h2>Splash Screens</h2>
+                </div>
+                <div id="splash-screen-list">
+                    <div class="entity-item" data-id="start">
+                        <div class="entity-name">Start Screen</div>
+                        <div class="entity-meta">Game Introduction</div>
                     </div>
-                    <div>
-                        <button type="button" id="add-items">&lt;&lt; Add</button>
-                        <button type="button" id="remove-items">Remove &gt;&gt;</button>
-                    </div>
-                    <div>
-                        <label for="available-items">Available Items:</label>
-                        <select id="available-items" multiple size="5"></select>
+                    <div class="entity-item" data-id="end">
+                        <div class="entity-name">End Screen</div>
+                        <div class="entity-meta">Game Completion</div>
                     </div>
                 </div>
-                
-                <label for="location-image">Image:</label>
-                <input type="file" id="location-image" accept="image/*">
-                <div id="image-preview"></div>
-                
-                <label for="location-audio">Audio:</label>
-                <input type="file" id="location-audio" accept="audio/*">
-                <div id="audio-preview"></div>
-                
-                <label for="location-narration">Narration:</label>
-                <textarea id="location-narration"></textarea>
-                
-                <div id="exits-section">
-                    <h3>Exits</h3>
-                    <div id="exits-list"></div>
-                    <button type="button" id="add-exit">Add Exit</button>
+            </div>
+
+            <!-- Edit Panel -->
+            <div class="edit-panel">
+                <div class="panel-header">
+                    <h2>Edit Splash Screen</h2>
                 </div>
-                
-                <button type="submit">Save Location</button>
-            </form>
-
-            <div id="location-list">
-                <!-- Location list will be populated here -->
+                <form id="splash-screen-form" class="edit-form">
+                    <input type="hidden" id="splash-screen-id">
+                    
+                    <div class="form-group">
+                        <label for="splash-title">Title</label>
+                        <input type="text" id="splash-title" required>
+                        <div class="style-controls">
+                            <select id="title-shadow">
+                                <option value="none">No Shadow</option>
+                                <option value="light">Light Shadow</option>
+                                <option value="medium">Medium Shadow</option>
+                                <option value="strong">Strong Shadow</option>
+                            </select>
+                            <select id="title-glow">
+                                <option value="none">No Glow</option>
+                                <option value="subtle">Subtle Glow</option>
+                                <option value="medium">Medium Glow</option>
+                                <option value="strong">Strong Glow</option>
+                            </select>
+                            <input type="color" id="title-color" value="#ffffff">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="splash-subtitle">Subtitle</label>
+                        <input type="text" id="splash-subtitle">
+                        <div class="style-controls">
+                            <select id="subtitle-shadow">
+                                <option value="none">No Shadow</option>
+                                <option value="light">Light Shadow</option>
+                                <option value="medium">Medium Shadow</option>
+                                <option value="strong">Strong Shadow</option>
+                            </select>
+                            <select id="subtitle-glow">
+                                <option value="none">No Glow</option>
+                                <option value="subtle">Subtle Glow</option>
+                                <option value="medium">Medium Glow</option>
+                                <option value="strong">Strong Glow</option>
+                            </select>
+                            <input type="color" id="subtitle-color" value="#ffffff">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="splash-image">Background Image</label>
+                        <input type="file" id="splash-image" accept="image/*">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="splash-audio">Background Audio</label>
+                        <input type="file" id="splash-audio" accept="audio/*">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="audio-autoplay">
+                            <label for="audio-autoplay">Autoplay Audio</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="transition-type">Screen Transition</label>
+                        <select id="transition-type">
+                            <option value="fade">Fade</option>
+                            <option value="slide-left">Slide Left</option>
+                            <option value="slide-right">Slide Right</option>
+                            <option value="zoom-in">Zoom In</option>
+                            <option value="zoom-out">Zoom Out</option>
+                            <option value="crossfade">Crossfade</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <h3>Primary Button</h3>
+                        <div class="button-config">
+                            <input type="text" id="primary-button-text" placeholder="Button Text">
+                            <input type="text" id="primary-button-url" placeholder="Button URL">
+                            <input type="color" id="primary-button-color" value="#ffffff">
+                            <input type="color" id="primary-button-bg" value="#000000">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <h3>Secondary Button</h3>
+                        <div class="button-config">
+                            <input type="text" id="secondary-button-text" placeholder="Button Text">
+                            <input type="text" id="secondary-button-url" placeholder="Button URL">
+                            <input type="color" id="secondary-button-color" value="#ffffff">
+                            <input type="color" id="secondary-button-bg" value="#000000">
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="delete-button">Delete</button>
+                        <button type="submit" class="save-button">Save Changes</button>
+                    </div>
+                </form>
             </div>
-        </section>
 
-        <section id="item-management">
-            <h2>Item Management</h2>
-            <form id="item-form">
-                <input type="hidden" id="item-key">
-                
-                <label for="item-name">Item Name:</label>
-                <input type="text" id="item-name" required>
-                
-                <label for="item-description">Description:</label>
-                <textarea id="item-description" required></textarea>
-                
-                <label for="item-weight">Weight (0-99):</label>
-                <input type="number" id="item-weight" min="0" max="99" required>
-                
-                <label for="item-image">Image:</label>
-                <input type="file" id="item-image" accept="image/*">
-                <div id="item-image-preview"></div>
-                
-                <label>
-                    <input type="checkbox" id="item-cant-be-lifted">
-                    Item Can't be Lifted
-                </label>
-                
-                <button type="submit">Save Item</button>
-            </form>
-
-            <div id="item-list">
-                <!-- Item list will be populated here -->
+            <!-- Preview Panel -->
+            <div class="preview-panel">
+                <div class="panel-header">
+                    <h2>Preview</h2>
+                </div>
+                <div id="splash-preview" class="preview-content"></div>
             </div>
-        </section>
+        </div>
+
+        <!-- Location Panels -->
+        <div id="location-panels" class="panels-container">
+            <!-- List Panel -->
+            <div class="list-panel">
+                <div class="panel-header">
+                    <h2>Locations</h2>
+                    <button class="new-button">+ New</button>
+                </div>
+                <div id="entity-list"></div>
+            </div>
+
+            <!-- Edit Panel -->
+            <div class="edit-panel">
+                <div class="panel-header">
+                    <h2>Edit Location</h2>
+                </div>
+                <form id="location-form" class="edit-form">
+                    <input type="hidden" id="location-key">
+                    
+                    <div class="form-group">
+                        <label for="location-name">Location Name</label>
+                        <input type="text" id="location-name" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="x-coordinate">X Coordinate</label>
+                            <input type="number" id="x-coordinate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="y-coordinate">Y Coordinate</label>
+                            <input type="number" id="y-coordinate" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location-description">Description</label>
+                        <textarea id="location-description" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location-narration">Narration</label>
+                        <textarea id="location-narration"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location-image">Scene Image</label>
+                        <input type="file" id="location-image" accept="image/*">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location-audio">Scene Audio</label>
+                        <input type="file" id="location-audio" accept="audio/*">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Exits</label>
+                        <div id="exits-list"></div>
+                        <button type="button" id="add-exit" class="secondary-button">Add Exit</button>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Items</label>
+                        <div class="items-management">
+                            <select id="available-items" multiple></select>
+                            <div class="items-controls">
+                                <button type="button" id="add-items">→</button>
+                                <button type="button" id="remove-items">←</button>
+                            </div>
+                            <select id="location-items" multiple></select>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="delete-button">Delete</button>
+                        <button type="submit" class="save-button">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Preview Panel -->
+            <div class="preview-panel">
+                <div class="panel-header">
+                    <h2>Preview</h2>
+                </div>
+                <div class="preview-content"></div>
+            </div>
+        </div>
+
+        <!-- Items Panels -->
+        <div id="items-panels" class="panels-container">
+            <!-- List Panel -->
+            <div class="list-panel">
+                <div class="panel-header">
+                    <h2>Items</h2>
+                    <button class="new-button">+ New</button>
+                </div>
+                <div id="items-list"></div>
+            </div>
+
+            <!-- Edit Panel -->
+            <div class="edit-panel">
+                <div class="panel-header">
+                    <h2>Edit Item</h2>
+                </div>
+                <form id="item-form" class="edit-form">
+                    <input type="hidden" id="item-key">
+                    
+                    <div class="form-group">
+                        <label for="item-name">Item Name</label>
+                        <input type="text" id="item-name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="item-description">Description</label>
+                        <textarea id="item-description" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="item-weight">Weight (0-99)</label>
+                        <input type="number" id="item-weight" min="0" max="99" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="item-image">Item Image</label>
+                        <input type="file" id="item-image" accept="image/*">
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="item-cant-be-lifted">
+                        <label for="item-cant-be-lifted">Item Can't be Lifted</label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="delete-button">Delete</button>
+                        <button type="submit" class="save-button">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Preview Panel -->
+            <div class="preview-panel">
+                <div class="panel-header">
+                    <h2>Preview</h2>
+                </div>
+                <div class="preview-content"></div>
+            </div>
+        </div>
+
+        <!-- Initialize Game Data Button -->
+        <button id="init-game" class="init-button">Initialize Game Data</button>
     </div>
 
     <script type="module" src="admin_script.js"></script>

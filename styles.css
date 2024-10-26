@@ -376,3 +376,28 @@ input[type="range"]::-webkit-slider-thumb {
     min-width: 20px;
     text-align: right;
 }
+.menu-toggle {
+    background: var(--ui-background);
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    opacity: var(--ui-opacity);
+    transition: opacity var(--button-transition);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px; /* Add spacing between icons */
+}
+
+.menu-toggle:hover {
+    opacity: 1;
+}
+
+#right-icons {
+    display: flex;
+    gap: 15px; /* Space between icons */
+}

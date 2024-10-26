@@ -11,7 +11,7 @@ import {
     update
 } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
 
-import { audioManager } from 'https://starman965.github.io/Verne/audio-manager.js';
+import { audioManager } from './audio-manager.js';
 
 // Initialize Firebase
 console.log('Initializing Firebase...');
@@ -46,6 +46,32 @@ document.querySelectorAll('.menu-toggle').forEach(button => {
         const targetId = button.id.split('-')[0]; // menu, inventory, or quests
         togglePanel(targetId);
     });
+});
+// scripts.js
+
+document.getElementById('fullscreen-button').addEventListener('click', enterFullScreen);
+
+// Function to close and open the browser menu
+function enterFullScreen() {
+    const gameContainer = document.getElementById('game-container');
+    if (gameContainer.requestFullscreen) {
+        gameContainer.requestFullscreen();
+    } else if (gameContainer.webkitRequestFullscreen) { // Safari support
+        gameContainer.webkitRequestFullscreen();
+    } else if (gameContainer.msRequestFullscreen) { // IE11 support
+        gameContainer.msRequestFullscreen();
+    }
+}
+
+// Optionally, enter full-screen when "Begin" is clicked if the browser allows it
+document.addEventListener('click', (e) => {
+    if (e.target.matches('.preview-primary-button')) {
+        const buttonUrl = e.target.dataset.url;
+        if (buttonUrl === '#game') {
+            handleStartGame();
+            enterFullScreen(); // Attempt to go fullscreen when the game starts
+        }
+    }
 });
 
 // Panel management
